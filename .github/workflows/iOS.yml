@@ -13,17 +13,23 @@ jobs:
 
     runs-on: ${{ matrix.os }}
     steps:
+      - name: Setup Java 17  # Use a newer Java version
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'  # Use Java 17 or higher
+
       - name: Checkout code
         uses: actions/checkout@v2
         with:
           submodules: recursive
-          
+
       - name: Step one
         run: chmod +x ./gradlew
 
       - name: Step two
         run: ./gradlew pack -PnoLocalArc=true
-        
+
       - name: Step three
         run: ./gradlew --stacktrace :ios:deploy -Probovm.iosSkipSigning=true -PnoLocalArc=true
 
